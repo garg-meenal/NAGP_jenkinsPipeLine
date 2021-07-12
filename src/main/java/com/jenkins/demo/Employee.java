@@ -1,4 +1,4 @@
-package com.jenkins.demo.entity;
+package com.jenkins.demo;
 
 public class Employee {
 	
