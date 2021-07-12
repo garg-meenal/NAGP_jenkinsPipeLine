@@ -1,0 +1,52 @@
+pipeline{
+    
+    agent any
+    
+    environment{
+        scannerHome = tool 'sonarqube-scanner';
+    }
+    tools{
+        maven 'Maven'
+    }
+    
+    options{
+        timestamps()
+        timeout(time: 1, unit: 'HOURS')
+        skipDefaultCheckout()
+        buildDiscarder(logRotator(
+            numToKeepStr: '3',
+            daysToKeepStr: '30'
+            ))
+    }
+    
+    stages{
+        stage('Checkout'){
+            steps{
+                echo 'Checkout step'
+                git credentialsId: 'github-java', url: 'https://github.com/meenalgarg/NAGP_jenkinsPipeLine.git'
+            }
+        }
+        
+        stage('Build'){
+            steps{
+                echo 'maven build step'
+                bat 'mvn clean install'
+            }
+        }
+        
+        stage('Unit Testing'){
+            steps{
+                echo 'unit testing step'
+                bat 'mvn test'
+            }
+        }
+        stage('SonarQube code analysis'){
+            steps{
+                echo 'sonarQube code analysis step'
+                withSonarQubeEnv('sonarqube') {
+                
+                }
+            }
+        }
+    }
+}
