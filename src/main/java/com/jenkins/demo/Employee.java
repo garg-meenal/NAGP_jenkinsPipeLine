@@ -2,9 +2,9 @@ package com.jenkins.demo;
 
 public class Employee {
 	
-	public int id;
-	public String name;
-	public String department;
+	private int id;
+	private String name;
+	private String department;
 	
 	public int getId() {
 		return id;
