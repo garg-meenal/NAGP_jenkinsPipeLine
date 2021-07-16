@@ -46,7 +46,7 @@ pipeline{
             steps{
                 echo 'sonarQube code analysis step'
                 withSonarQubeEnv('Test_Sonar') {
-					bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonar_meenalgarg2610 -Dsonar.host.url=http://localhost:9000 -Dsonar.login=b6fc4a5edeaedce4c6b76def4af2d4307fc591d5 -Dsonar.java.binaries=target/classes"
+					bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonar_meenalgarg2610 -Dsonar.host.url=http://localhost:9000 -Dsonar.java.binaries=target/classes"
                 }
             }
         }
@@ -60,7 +60,7 @@ pipeline{
             steps{
                 echo 'push image to docker hub step'
                 bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
-                withDockerRegistry(credentialsId: 'dockerHub', url: ''){
+                withDockerRegistry(credentialsId: 'DockerHub', url: ''){
                 bat "docker push ${registry}:${BUILD_NUMBER}"
                 }
             }
