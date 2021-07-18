@@ -29,7 +29,7 @@ pipeline{
         stage('Checkout'){
             steps{
                 echo 'Checkout step'
-                git poll:true, credentialsId: 'github-java', url: 'https://github.com/meenalgarg/NAGP_jenkinsPipeLine.git'
+                git poll:true, url: 'https://github.com/garg-meenal/NAGP_jenkinsPipeLine.git'
             }
         }
         
