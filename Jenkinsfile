@@ -76,7 +76,7 @@ pipeline{
                 }
             }
         }
-		stage{
+		stage('Remove previous docker container'){
 			steps{
 				echo 'Remove already running docker container'
 				script{
