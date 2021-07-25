@@ -11,12 +11,12 @@ spec:
       app: java-app
     template:
       metadata:
-        lables:
+        labels:
           app: java-app
         spec:
           containers:
             - name: java-app
-              iamge: meenalgarg2610/jenkins-pipeline:latest
+              image: meenalgarg2610/jenkins-pipeline:latest
               ports:
                 - name: http
                   containerPort: 80
