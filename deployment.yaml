@@ -7,20 +7,20 @@ metadata:
 spec:
   replicas: 3
   selector:
-    match-labels:
+    matchLabels:
       app: java-app
-    template:
-      metadata:
-        labels:
-          app: java-app
-        spec:
-          containers:
-            - name: java-app
-              image: meenalgarg2610/jenkins-pipeline:latest
-              ports:
-                - name: http
-                  containerPort: 80
-                  protocol: TCP
+  template:
+    metadata:
+      labels:
+        app: java-app
+    spec:
+      containers:
+        - name: java-app
+          image: meenalgarg2610/jenkins-pipeline:latest
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
 ---
 apiVersion: v1
 kind: Service
