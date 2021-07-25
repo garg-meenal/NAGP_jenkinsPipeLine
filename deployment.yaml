@@ -7,7 +7,7 @@ metadata:
 spec:
   replicas: 3
   selector:
-    match-lables:
+    match-labels:
       app: java-app
     template:
       metadata:
