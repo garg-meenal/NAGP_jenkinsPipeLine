@@ -46,6 +46,7 @@ pipeline{
                 bat 'mvn test'
             }
         }
+		
         stage('SonarQube code analysis'){
             steps{
                 echo 'sonarQube code analysis step'
@@ -59,12 +60,14 @@ pipeline{
                 }
             }
         }
+		
         stage('Docker image'){
             steps{
                 echo 'create docker image step'
                 bat "docker build -t i-${username}-master --no-cache -f Dockerfile ."
             }
         }
+		
         stage('Push image to registry'){
             steps{
                 echo 'push image to docker hub step'
@@ -78,6 +81,7 @@ pipeline{
                 }
             }
         }
+		
 		stage('Remove previous docker container'){
 			steps{
 				echo 'Remove already running docker container'
@@ -95,20 +99,25 @@ pipeline{
                 }
 			}
 		}
-        stage('Deployment'){
-			parallel{
-				stage('Docker depployment'){
-					steps{
-						echo 'docker deployment step'
-						bat "docker run --name c-${username}-master -d -p 7100:8800 ${registry}:${BUILD_NUMBER}"
-					}
-				}
-				stage('Kubernetes deployment'){
-					steps{
-						bat 'kubectl apply -f deployment.yaml'
-					}
-				}
+		
+		stage('Docker deployment'){
+			steps{
+				echo 'docker deployment step'
+				bat "docker run --name c-${username}-master -d -p 7100:8800 ${registry}:${BUILD_NUMBER}"
 			}
-        }
+		}
+		
+        //stage('Local Kubernetes Deployment'){
+			//steps{
+				//echo 'Deploying on local kubernetes'
+				//bat 'kubectl apply -f deployment.yaml'
+			//}
+		//}
+		
+		stage('GKE Deployment'){
+			steps{
+				step([$class: 'KubernetesEngineBuilder', projectId: 'sodium-burner-319611', clusterName: 'demo-cluster', location: //'us-central1', manifestPattern: 'deployment.yaml', credentialsId: 'NAGP_jenkinsPipeline', verifyDeployment: true])
+			}
+		}        
     }
 }
