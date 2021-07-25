@@ -29,7 +29,7 @@ pipeline{
         stage('Checkout'){
             steps{
                 echo 'Checkout step'
-                git poll:true, url: 'https://github.com/garg-meenal/NAGP_jenkinsPipeLine.git'
+                git poll:true, credentialsId: 'github-java' , url: 'https://github.com/garg-meenal/NAGP_jenkinsPipeLine.git'
             }
         }
         
@@ -76,10 +76,10 @@ pipeline{
                 }
             }
         }
-        stage('Docker Deployment'){
-            steps{
-                echo 'docker deployment step'
-                script{
+		stage{
+			steps{
+				echo 'Remove already running docker container'
+				script{
                     try{
                         // stop already running container
                         bat "docker stop c-${username}-master"
@@ -89,12 +89,24 @@ pipeline{
                         // Nothing to be done here, added only to prevent the failure of pipeline 
                         //because when pipeline will run for the first time, 
                         //there won't be any container to remove
-                    }finally{
-                        //start a new container
-                        bat "docker run --name c-${username}-master -d -p 7100:8800 ${registry}:${BUILD_NUMBER}"
                     }
                 }
-            }
+			}
+		}
+        stage('Deployment'){
+			parallel{
+				stage('Docker depployment'){
+					steps{
+						echo 'docker deployment step'
+						bat "docker run --name c-${username}-master -d -p 7100:8800 ${registry}:${BUILD_NUMBER}"
+					}
+				}
+				stage('Kubernetes deployment'){
+					steps{
+						bat 'kubectl apply -f deployment.yaml'
+					}
+				}
+			}
         }
     }
 }
