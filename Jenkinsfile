@@ -116,7 +116,7 @@ pipeline{
 		
 		stage('GKE Deployment'){
 			steps{
-				step([$class: 'KubernetesEngineBuilder', projectId: 'sodium-burner-319611', clusterName: 'demo-cluster', location: //'us-central1', manifestPattern: 'deployment.yaml', credentialsId: 'NAGP_jenkinsPipeline', verifyDeployment: true])
+				step([$class: 'KubernetesEngineBuilder', projectId: 'sodium-burner-319611', clusterName: 'demo-cluster', location: 'us-central1', manifestPattern: 'deployment.yaml', credentialsId: 'NAGP_jenkinsPipeline', verifyDeployment: true])
 			}
 		}        
     }
