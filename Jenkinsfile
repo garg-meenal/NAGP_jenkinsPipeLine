@@ -69,10 +69,12 @@ pipeline{
             steps{
                 echo 'push image to docker hub step'
                 bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
+				bat "docker tag i-${username}-master ${registry}:latest"
                 
                 // DockerHub credential is provided in readme.txt
                 withDockerRegistry(credentialsId: 'DockerHub', url: ''){
                 bat "docker push ${registry}:${BUILD_NUMBER}"
+				bat "docker push ${registry}:latest"
                 }
             }
         }

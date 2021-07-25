@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: java-app
-          image: meenalgarg2610/jenkins-pipeline
+          image: meenalgarg2610/jenkins-pipeline:latest
           ports:
             - name: http
               containerPort: 80
