@@ -19,7 +19,7 @@ spec:
           image: meenalgarg2610/jenkins-pipeline:latest
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
 ---
 apiVersion: v1
@@ -33,5 +33,5 @@ spec:
   ports:
     - protocol: TCP
       nodePort: 30158
-      port: 80
-      targetPort: 80 
+      port: 8080
+      targetPort: 8080 
