@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: app-deployment 
+  namespace: jenkins-demo
   labels: 
     app: java-app
 spec:
@@ -21,11 +22,19 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: java-app
+  namespace: jenkins-demo
 spec:
   type: NodePort
   selector:
