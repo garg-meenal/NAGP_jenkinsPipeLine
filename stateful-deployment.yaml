@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: jenkins-demo
+  labels:
+    app: nginx
+spec:
+  ports:
+    - port: 80
+      name: web
+  clusterIP: None
+  selector:
+    app: nginx
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: jenkins-demo
+spec:
+  serviceName: "nginx-svc"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: k8s.gcr.io/nginx-slim:0.8
+          ports:
+            - name: web
+              containerPort: 80
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+          resources:
+            requests:
+              memory: 250Mi
+              cpu: 250m
+  volumeClaimTemplates:
+    - metadata:
+        name: www
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: jenkins-demo
+  labels:
+    app: mysql
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: jenkins-demo
+  name: mysql
+spec:
+  selector: 
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - image: mysql:8
+          name: mysql
+          env:
+            - name:  MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-info
+                  key: DB_PASSWORD
+          ports:
+            - containerPort: 3306
+              name: mysql
+          resources:
+            requests:
+              memory: 250Mi
+              cpu: 250m
+            limits:
+              memory: 250Mi
+              cpu: 250m
+          volumeMounts:
+            - name: mysql-persistent-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-volume
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+
