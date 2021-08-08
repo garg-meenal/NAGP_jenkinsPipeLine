@@ -8,7 +8,7 @@ pipeline{
         registry = 'meenalgarg2610/jenkins-pipeline'
     }
     tools{
-        maven 'Maven'
+        maven 'Maven3'
     }
     // trigger for polling any change in github
     triggers {
